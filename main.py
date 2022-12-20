@@ -2,15 +2,15 @@ from tkinter import *
 import pandas as pd
 import random
 
-current_card = {} # making an empty dict so that both functions can use the same dict
+current_card = {} 
 to_learn = {}
 try:
     de_df = pd.read_csv("words_to_learn.csv")
 except FileNotFoundError:
     orignal_data = pd.read_csv("de_words.csv")
-    to_learn = orignal_data.to_dict(orient="records") #orient record makes this dict into a list 
+    to_learn = orignal_data.to_dict(orient="records") 
 else:
-    to_learn = de_df.to_dict(orient="records") # the records orientations gives the required orientation where each word has its translations
+    to_learn = de_df.to_dict(orient="records") 
 
 #Constants
 BACKGROUND_COLOR = "#B1DDC6"
@@ -19,8 +19,8 @@ WORD_FONT = ("Ariel",55,"bold","italic")
 
 #Functions
 def next_card():
-    global current_card,flip_timer #making both the variables global so that both the function can access these.
-    window.after_cancel(flip_timer) #for every time we go to a new card we will invalidate this timer
+    global current_card,flip_timer 
+    window.after_cancel(flip_timer) 
     current_card = random.choice(to_learn)
     de_card = current_card["German"]
     canvas.itemconfig(card_title,text=f"Deutsch",fill="black")
@@ -34,7 +34,7 @@ def flip_card():
     canvas.itemconfig(de_word,text = current_card["English"],fill = "white")
     
 def known_card():
-    to_learn.remove(current_card) # it removes the current_card from the dict 
+    to_learn.remove(current_card)  
     known_words = pd.DataFrame(to_learn)
     known_words.to_csv("words_to_learn.csv",index=False)
     next_card()
@@ -46,7 +46,7 @@ window.title("FlashCards")
 window.minsize()
 window.config(padx=50,pady=50,bg=BACKGROUND_COLOR)
 
-flip_timer = window.after(4000,func=flip_card) #windows after will call the function after 2s 
+flip_timer = window.after(4000,func=flip_card)  
 
 canvas = Canvas(width=800,height=526,bg=BACKGROUND_COLOR,highlightthickness=0)
 card_front_img = PhotoImage(file="images\card_front.png")
@@ -65,10 +65,6 @@ right_button = Button(image=right_img,highlightthickness=0,command=known_card)
 right_button.grid(row=1,column=1)
 
 next_card()
-
-#Reading_data
-
-
 
 window.mainloop()
 
